@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todo List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="todo-app">
+        <h1>My Todo List</h1>
+        <p class="subtitle">Stay organized and complete your tasks</p>
+
+        <!-- Add Task -->
+        <div class="input-area">
+            <input type="text" id="taskInput" placeholder="Enter a new task...">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+
+        <!-- Todo Items -->
+        <div id="todoList">
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Open the Raw_Data Excel sheet</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Remove completely blank rows</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Find and fill blank cells</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Remove extra spaces using TRIM</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Standardize Department and City names</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Fix invalid email addresses</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Clean phone numbers</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Create an Age Category column</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Create a PivotTable</span>
+            </div>
+
+            <div class="todo-item">
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>Build a simple dashboard</span>
+            </div>
+
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-section">
+            <div class="progress-text">
+                <span>Progress</span>
+                <span id="progress">0 / 10 completed</span>
+            </div>
+
+            <div class="progress-bar">
+                <div id="progressFill"></div>
+            </div>
+        </div>
+
+        <button class="clear-btn" onclick="clearCompleted()">
+            Clear Completed
+        </button>
+
+    </div>
+
+    <script>
+
+        function toggleTask(checkbox) {
+
+            const item = checkbox.parentElement;
+
+            if (checkbox.checked) {
+                item.classList.add("completed");
+            } else {
+                item.classList.remove("completed");
+            }
+
+            updateProgress();
+        }
+
+
+        function addTask() {
+
+            const input = document.getElementById("taskInput");
+            const taskText = input.value.trim();
+
+            if (taskText === "") {
+                alert("Please enter a task.");
+                return;
+            }
+
+            const todoList = document.getElementById("todoList");
+
+            const item = document.createElement("div");
+            item.className = "todo-item";
+
+            item.innerHTML = `
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span>${taskText}</span>
+            `;
+
+            todoList.appendChild(item);
+
+            input.value = "";
+
+            updateProgress();
+        }
+
+
+        function updateProgress() {
+
+            const items = document.querySelectorAll(".todo-item");
+            const completed = document.querySelectorAll(
+                ".todo-item input[type='checkbox']:checked"
+            );
+
+            const total = items.length;
+            const done = completed.length;
+
+            document.getElementById("progress").textContent =
+                `${done} / ${total} completed`;
+
+            const percentage = total === 0
+                ? 0
+                : (done / total) * 100;
+
+            document.getElementById("progressFill").style.width =
+                percentage + "%";
+        }
+
+
+        function clearCompleted() {
+
+            const completedItems = document.querySelectorAll(
+                ".todo-item input[type='checkbox']:checked"
+            );
+
+            completedItems.forEach(checkbox => {
+                checkbox.parentElement.remove();
+            });
+
+            updateProgress();
+        }
+
+
+        document.getElementById("taskInput").addEventListener(
+            "keypress",
+            function(event) {
+
+                if (event.key === "Enter") {
+                    addTask();
+                }
+
+            }
+        );
+
+        updateProgress();
+
+    </script>
+
+</body>
+</html>
